@@ -1,7 +1,17 @@
 package yandexAPI;
-
+/**
+ * <p>  List of the languages that Yandex Translate supports in java enum.
+ * <br> Examples:
+ * <ul>
+ * 		<li> YandexLanguage.English
+ * 		<li> YandexLanguage.French
+ *      <li> YandexLanguage.Japanese
+ * </ul>
+ * 
+ * @author Bumbleboss
+ *
+ */
 public enum YandexLanguage {
-	
 	Azerbaijan("az"),
 	Albanian("sq"),
 	Amharic("am"),

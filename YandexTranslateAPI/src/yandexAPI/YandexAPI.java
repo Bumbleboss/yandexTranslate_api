@@ -8,20 +8,39 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * @author Bumbleboss
+ */
 public class YandexAPI {
 	
 	String apikey;
-	
+	/**
+	 *@param key
+	 *	     API key registered on Yandex for your application. 
+	 */
 	public YandexAPI(String key) {
 		this.apikey = key;
 	}
 
 	private static OkHttpClient client = new OkHttpClient();
-	
-	public YandexResponse getYandexResponse(String sentence, YandexLanguage lang, YandexLanguage langto) throws YandexException{
+	/**
+	 * <p> Retrives translation from Yandex after filling the params
+	 * 
+	 * @param text
+	 * 		  The text to translate
+	 * @param lang
+	 * 		  The language of the given text
+	 * @param langto
+	 * 		  The language you want the text to be translated to
+	 * 
+	 * @return Translated text.
+	 * 
+	 * @throws YandexException
+	 */
+	public YandexResponse getYandexResponse(String text, YandexLanguage lang, YandexLanguage langto) throws YandexException{
 		String json = null;
 		try{
-			json = getJSONPOST("https://translate.yandex.net/api/v1.5/tr.json/translate?key="+apikey+"&text="+sentence+"&lang="+lang+"-"+langto);
+			json = getJSONPOST("https://translate.yandex.net/api/v1.5/tr.json/translate?key="+apikey+"&text="+text+"&lang="+lang+"-"+langto);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -49,8 +68,7 @@ public class YandexAPI {
 	
 	private static String getJSONPOST(String url) throws IOException {
 		Request request = new Request.Builder()
-				.url(url)
-				.method("POST", RequestBody.create(null, new byte[0])).build();
+				.url(url).method("POST", RequestBody.create(null, new byte[0])).build();
 		Response response = client.newCall(request).execute();
 		return response.body().string();
 	}

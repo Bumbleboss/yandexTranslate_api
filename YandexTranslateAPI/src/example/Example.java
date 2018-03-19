@@ -3,7 +3,9 @@ package example;
 import yandexAPI.YandexAPI;
 import yandexAPI.YandexException;
 import yandexAPI.YandexLanguage;
-
+/**
+ * @author Bumbleboss
+ */
 public class Example {
 
 	public static void main (String[] args) {

@@ -16,12 +16,23 @@ public class YandexResponse {
 	@Expose
 	private List<String> text;
 	
+	/**
+	 * @return Response code
+	 */
 	public String getCode() {
 		return code;
 	}
+	
+	/**
+	 * @return Language of the text
+	 */
 	public String getLang() {
 		return lang;
 	}
+	
+	/**
+	 * @return Translated text in a {@link java.util.List List}
+	 */
 	public List<String> getText() {
 		return text;
 	}
