@@ -8,7 +8,7 @@ public class YandexResponse {
 
 	@SerializedName("code")
 	@Expose
-	private String code;
+	private Integer code;
 	@SerializedName("lang")
 	@Expose
 	private String lang;
@@ -19,12 +19,12 @@ public class YandexResponse {
 	/**
 	 * @return Response code
 	 */
-	public String getCode() {
+	public Integer getCode() {
 		return code;
 	}
 	
 	/**
-	 * @return Language of the text
+	 * @return Language direction of provided text
 	 */
 	public String getLang() {
 		return lang;
