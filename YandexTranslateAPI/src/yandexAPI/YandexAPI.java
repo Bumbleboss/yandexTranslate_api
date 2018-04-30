@@ -33,11 +33,11 @@ public class YandexAPI {
 	 * @param langto
 	 * 		  The language you want the text to be translated to
 	 * 
-	 * @return Translated text.
+	 * @return Translated text
 	 * 
 	 * @throws YandexException
 	 */
-	public YandexResponse getYandexResponse(String text, YandexLanguage lang, YandexLanguage langto) throws YandexException{
+	public YandexResponse getYandexResponse(String text, YandexLanguage lang, YandexLanguage langto) throws YandexException {
 		String json = null;
 		try{
 			json = getJSONPOST("https://translate.yandex.net/api/v1.5/tr.json/translate?key="+apikey+"&text="+text+"&lang="+lang+"-"+langto);
@@ -47,20 +47,39 @@ public class YandexAPI {
 		Gson gson = new Gson();		
 		YandexResponse inf = gson.fromJson(json, YandexResponse.class);
 		
-		if(inf.getCode().equals("401")){
-			throw new YandexException("Invalid API key.", "Please provide a valid API key.");
-		}else if(inf.getCode().equals("402")) {
-			throw new YandexException("Blocked API key", "Your API key is blocked.");
-		}else if(inf.getCode().equals("404")) {
-			throw new YandexException("Limit Exceeded","Exceeded the daily limit on the amount of translated text.");
-		}else if(inf.getCode().equals("413")) {
-			throw new YandexException("Limit Exceeded","Exceeded the maximum text size.");
-		}else if(inf.getCode().equals("422")) {
-			throw new YandexException("Translate error","The text cannot be translated.");
-		}else if(inf.getCode().equals("501")) {
-			throw new YandexException("Invalid language","The specified translation direction is not supported.");
-		}else if(inf.getCode().equals("502")) {
-			throw new YandexException("Invalid parameter", "Please put a valid input language");
+		if(inf.getCode() != 200){
+			String[] exp = getResponseCode(inf.getCode());
+			throw new YandexException(exp[0], exp[1]);
+		}else{
+			return inf;
+		}
+	}
+	
+	/**
+	 * <p> Retrives translation from Yandex after filling the params
+	 * 
+	 * @param text
+	 * 		  The text to translate
+	 * @param langto
+	 * 		  The language you want the text to be translated to
+	 * 
+	 * @return Translated text
+	 * 
+	 * @throws YandexException
+	 */
+	public YandexResponse getYandexResponse(String text, YandexLanguage langto) throws YandexException {
+		String json = null;
+		try{
+			json = getJSONPOST("https://translate.yandex.net/api/v1.5/tr.json/translate?key="+apikey+"&text="+text+"&lang="+langto);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		Gson gson = new Gson();		
+		YandexResponse inf = gson.fromJson(json, YandexResponse.class);
+		
+		if(inf.getCode() != 200){
+			String[] exp = getResponseCode(inf.getCode());
+			throw new YandexException(exp[0], exp[1]);
 		}else{
 			return inf;
 		}
@@ -71,5 +90,18 @@ public class YandexAPI {
 				.url(url).method("POST", RequestBody.create(null, new byte[0])).build();
 		Response response = client.newCall(request).execute();
 		return response.body().string();
+	}
+	
+	private String[] getResponseCode(int code) {
+		switch (code) {
+			case 401: return new String[] {"Invalid API key", "Please provide a valid API key"};
+			case 402: return new String[] {"Blocked API key", "Your API key is blocked"};
+			case 404: return new String[] {"Limit Exceeded", "Exceeded the daily limit on the amount of translated text"};
+			case 413: return new String[] {"Limit Exceeded", "Exceeded the maximum text size"};
+			case 422: return new String[] {"Translate error", "The text cannot be translated"};
+			case 501: return new String[] {"Invalid language", "The text cannot be translated"};
+			case 502: return new String[] {"Invalid parameter", "Please put a valid input language"};
+		}
+		return null;
 	}
 }
