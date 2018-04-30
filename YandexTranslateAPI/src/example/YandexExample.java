@@ -10,7 +10,7 @@ public class YandexExample {
 
 	public static void main (String[] args) {
 		
-		YandexAPI api = new YandexAPI("your token");		
+		YandexAPI api = new YandexAPI("token");		
 		try {
 			System.out.println(api.getYandexResponse("Hello there!", YandexLanguage.French)
 					.getText().get(0));
