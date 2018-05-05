@@ -1,4 +1,4 @@
-package yandexAPI;
+package yandexAPI.entities;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
@@ -31,6 +31,7 @@ public class YandexResponse {
 	}
 	
 	/**
+	 * <br> Can be null on some calls
 	 * @return Translated text in a {@link java.util.List List}
 	 */
 	public List<String> getText() {

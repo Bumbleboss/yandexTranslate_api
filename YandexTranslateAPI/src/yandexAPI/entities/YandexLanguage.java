@@ -1,4 +1,4 @@
-package yandexAPI;
+package yandexAPI.entities;
 /**
  * <p>  List of the languages that Yandex Translate supports in java enum.
  * <br> Examples:

@@ -3,26 +3,58 @@ package yandexAPI;
 import java.io.IOException;
 
 import com.google.gson.Gson;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import yandexAPI.entities.YandexConstants;
+import yandexAPI.entities.YandexLanguage;
+import yandexAPI.entities.YandexResponse;
 
 /**
  * @author Bumbleboss
  */
 public class YandexAPI {
 	
-	String apikey;
+	String apiKey;
 	/**
 	 *@param key
-	 *	     API key registered on Yandex for your application. 
+	 *	     API key registered on Yandex for your application
 	 */
 	public YandexAPI(String key) {
-		this.apikey = key;
+		this.apiKey = key;
 	}
 
-	private static OkHttpClient client = new OkHttpClient();
+	private OkHttpClient client = new OkHttpClient();
+	private YandexConstants con = new YandexConstants();
+	private Gson gson = new Gson(); 
+	
+	/**
+	 * <p> Retrives the text language from Yandex after filling the params
+	 * 
+	 * @param text
+	 * 		  The text for detecting it's language
+	 * 
+	 * @return Text's language
+	 * 
+	 * @throws YandexException
+	 */
+	public YandexResponse getTextLanguage(String text) throws YandexException {
+		String json = null;
+		try {
+			json = getJSONPOST(con.getURL(con.DETECT, apiKey, text, null));
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		YandexResponse inf = gson.fromJson(json, YandexResponse.class);
+		
+		if(inf.getCode() != 200){
+			String[] exp = con.getResponseCode(inf.getCode());
+			throw new YandexException(exp[0], exp[1]);
+		}
+		return inf;
+	}
 	/**
 	 * <p> Retrives translation from Yandex after filling the params
 	 * 
@@ -40,19 +72,17 @@ public class YandexAPI {
 	public YandexResponse getYandexResponse(String text, YandexLanguage lang, YandexLanguage langto) throws YandexException {
 		String json = null;
 		try{
-			json = getJSONPOST("https://translate.yandex.net/api/v1.5/tr.json/translate?key="+apikey+"&text="+text+"&lang="+lang+"-"+langto);
+			json = getJSONPOST(con.getURL(con.TRANSLATE, apiKey, text, lang+"-"+langto));
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		Gson gson = new Gson();		
 		YandexResponse inf = gson.fromJson(json, YandexResponse.class);
 		
 		if(inf.getCode() != 200){
-			String[] exp = getResponseCode(inf.getCode());
+			String[] exp = con.getResponseCode(inf.getCode());
 			throw new YandexException(exp[0], exp[1]);
-		}else{
-			return inf;
 		}
+		return inf;
 	}
 	
 	/**
@@ -70,38 +100,23 @@ public class YandexAPI {
 	public YandexResponse getYandexResponse(String text, YandexLanguage langto) throws YandexException {
 		String json = null;
 		try{
-			json = getJSONPOST("https://translate.yandex.net/api/v1.5/tr.json/translate?key="+apikey+"&text="+text+"&lang="+langto);
+			json = getJSONPOST(con.getURL(con.TRANSLATE, apiKey, text, langto.toString()));
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		Gson gson = new Gson();		
 		YandexResponse inf = gson.fromJson(json, YandexResponse.class);
 		
 		if(inf.getCode() != 200){
-			String[] exp = getResponseCode(inf.getCode());
+			String[] exp = con.getResponseCode(inf.getCode());
 			throw new YandexException(exp[0], exp[1]);
-		}else{
-			return inf;
 		}
+		return inf;
 	}
 	
-	private static String getJSONPOST(String url) throws IOException {
+	private String getJSONPOST(String url) throws IOException {
 		Request request = new Request.Builder()
 				.url(url).method("POST", RequestBody.create(null, new byte[0])).build();
 		Response response = client.newCall(request).execute();
 		return response.body().string();
-	}
-	
-	private String[] getResponseCode(int code) {
-		switch (code) {
-			case 401: return new String[] {"Invalid API key", "Please provide a valid API key"};
-			case 402: return new String[] {"Blocked API key", "Your API key is blocked"};
-			case 404: return new String[] {"Limit Exceeded", "Exceeded the daily limit on the amount of translated text"};
-			case 413: return new String[] {"Limit Exceeded", "Exceeded the maximum text size"};
-			case 422: return new String[] {"Translate error", "The text cannot be translated"};
-			case 501: return new String[] {"Invalid language", "The text cannot be translated"};
-			case 502: return new String[] {"Invalid parameter", "Please put a valid input language"};
-		}
-		return null;
 	}
 }
