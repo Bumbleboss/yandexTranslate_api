@@ -31,7 +31,7 @@ public class YandexResponse {
 	}
 	
 	/**
-	 * <br> Can be null on some calls
+	 * Can be null on some calls
 	 * @return Translated text in a {@link java.util.List List}
 	 */
 	public List<String> getText() {
