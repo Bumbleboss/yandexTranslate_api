@@ -14,12 +14,16 @@ Requesting translations
 System.out.println(inf.getYandexResponse("Hello there!", YandexLanguage.French)
 	.getText().get(0));
 ```
-Detecting Language
+Getting Language
 ```Java
 System.out.println(api.getTextLanguage("Hello there!").getLang());
 ```
 
+## Download
+**Latest version**: [GitHub releases](https://github.com/Bumbleboss/YandexTranslateAPI/releases) [![](https://jitpack.io/v/Bumbleboss/YandexTranslateAPI.svg)](https://jitpack.io/#Bumbleboss/YandexTranslateAPI)
+
+
 ## Dependencies
-* [gson-2.8.3](https://github.com/google/gson)
+* [gson-2.8.5](https://github.com/google/gson)
 * [okhttp-3.10.0](https://github.com/square/okhttp)
 * [okio-1.14.1](https://github.com/square/okio/)
