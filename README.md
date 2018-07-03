@@ -19,7 +19,7 @@ Getting Language
 System.out.println(api.getTextLanguage("Hello there!").getLang());
 ```
 
-##Download
+## Download
 **Latest version**: [GitHub releases](https://github.com/Bumbleboss/YandexTranslateAPI/releases) [![](https://jitpack.io/v/Bumbleboss/YandexTranslateAPI.svg)](https://jitpack.io/#Bumbleboss/YandexTranslateAPI)
 
 
