@@ -1,4 +1,4 @@
-package yandexAPI.entities;
+package yandexAPI;
 
 import okhttp3.HttpUrl;
 import okhttp3.HttpUrl.Builder;
@@ -7,13 +7,13 @@ import okhttp3.HttpUrl.Builder;
  */
 
 public class YandexConstants {
-	
+
 	private String URL = "translate.yandex.net";
-	
+
 	private String API_VERSION = "api/v1.5/";
-	
+
 	private String JSON = "tr.json/";
-	
+
 	public String TRANSLATE = "translate";
 	
 	public String DETECT = "detect";
@@ -35,7 +35,7 @@ public class YandexConstants {
 	 */
 	public String getURL(String path, String key, String text, String lang) {
 		Builder uri = new HttpUrl.Builder();
-		
+
 		uri.scheme("https").host(URL).addPathSegments(API_VERSION+JSON+path);
 		uri.addQueryParameter("key", key);
 		uri.addQueryParameter("text", text);
@@ -48,6 +48,8 @@ public class YandexConstants {
 	
 	/**
 	 * @param code
+	 * 		  The repsonse code of the request
+	 *
 	 * @return Response codes of every call end
 	 */
 	public String[] getResponseCode(int code) {
