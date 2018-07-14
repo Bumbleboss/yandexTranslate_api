@@ -8,15 +8,15 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import yandexAPI.entities.YandexConstants;
-import yandexAPI.entities.YandexLanguage;
-import yandexAPI.entities.YandexResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Bumbleboss
  */
 public class YandexAPI {
-	
+
+	private Logger logger = LoggerFactory.getLogger("Yandex");
 	private String apiKey;
 	/**
 	 *@param key
@@ -37,21 +37,19 @@ public class YandexAPI {
 	 * 		  The text for detecting it's language
 	 * 
 	 * @return Text's language
-	 * 
-	 * @throws YandexException
 	 */
-	public YandexResponse getTextLanguage(String text) throws YandexException {
+	public YandexResponse getTextLanguage(String text) {
 		String json = null;
 		try {
 			json = getJSONPOST(con.getURL(con.DETECT, apiKey, text, null));
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+
 		YandexResponse inf = gson.fromJson(json, YandexResponse.class);
-		
 		if(inf.getCode() != 200){
 			String[] exp = con.getResponseCode(inf.getCode());
-			throw new YandexException(exp[0], exp[1]);
+			logger.error(inf.getCode() + " - " + exp[1]);
 		}
 		return inf;
 	}
@@ -66,21 +64,19 @@ public class YandexAPI {
 	 * 		  The language you want the text to be translated to
 	 * 
 	 * @return Translated text
-	 * 
-	 * @throws YandexException
 	 */
-	public YandexResponse getYandexResponse(String text, YandexLanguage lang, YandexLanguage langto) throws YandexException {
+	public YandexResponse getYandexResponse(String text, YandexLanguage lang, YandexLanguage langto) {
 		String json = null;
 		try{
 			json = getJSONPOST(con.getURL(con.TRANSLATE, apiKey, text, lang+"-"+langto));
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+
 		YandexResponse inf = gson.fromJson(json, YandexResponse.class);
-		
 		if(inf.getCode() != 200){
 			String[] exp = con.getResponseCode(inf.getCode());
-			throw new YandexException(exp[0], exp[1]);
+			logger.error(inf.getCode() + " - " + exp[1]);
 		}
 		return inf;
 	}
@@ -94,21 +90,19 @@ public class YandexAPI {
 	 * 		  The language you want the text to be translated to
 	 * 
 	 * @return Translated text
-	 * 
-	 * @throws YandexException
 	 */
-	public YandexResponse getYandexResponse(String text, YandexLanguage langto) throws YandexException {
+	public YandexResponse getYandexResponse(String text, YandexLanguage langto) {
 		String json = null;
 		try{
 			json = getJSONPOST(con.getURL(con.TRANSLATE, apiKey, text, langto.toString()));
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+
 		YandexResponse inf = gson.fromJson(json, YandexResponse.class);
-		
 		if(inf.getCode() != 200){
 			String[] exp = con.getResponseCode(inf.getCode());
-			throw new YandexException(exp[0], exp[1]);
+			logger.error(inf.getCode() + " - " + exp[1]);
 		}
 		return inf;
 	}
