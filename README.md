@@ -27,4 +27,3 @@ System.out.println(api.getTextLanguage("Hello there!").getLang());
 * [gson-2.8.5](https://github.com/google/gson)
 * [okhttp-3.10.0](https://github.com/square/okhttp)
 * [okio-1.14.1](https://github.com/square/okio/)
-* [logback-classic](https://github.com/qos-ch/logback/tree/master/logback-classic)
