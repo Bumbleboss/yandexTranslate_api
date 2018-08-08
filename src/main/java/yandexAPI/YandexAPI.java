@@ -8,15 +8,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Bumbleboss
  */
 public class YandexAPI {
 
-	private Logger logger = LoggerFactory.getLogger("Yandex");
 	private String apiKey;
 	/**
 	 *@param key
@@ -38,7 +35,7 @@ public class YandexAPI {
 	 * 
 	 * @return Text's language
 	 */
-	public YandexResponse getTextLanguage(String text) {
+	public YandexResponse getTextLanguage(String text) throws YandexException{
 		String json = null;
 		try {
 			json = getJSONPOST(con.getURL(con.DETECT, apiKey, text, null));
@@ -49,7 +46,7 @@ public class YandexAPI {
 		YandexResponse inf = gson.fromJson(json, YandexResponse.class);
 		if(inf.getCode() != 200){
 			String[] exp = con.getResponseCode(inf.getCode());
-			logger.error(inf.getCode() + " - " + exp[1]);
+			throw new YandexException(inf.getCode()+"", exp[1]);
 		}
 		return inf;
 	}
@@ -65,7 +62,7 @@ public class YandexAPI {
 	 * 
 	 * @return Translated text
 	 */
-	public YandexResponse getYandexResponse(String text, YandexLanguage lang, YandexLanguage langto) {
+	public YandexResponse getYandexResponse(String text, YandexLanguage lang, YandexLanguage langto) throws YandexException {
 		String json = null;
 		try{
 			json = getJSONPOST(con.getURL(con.TRANSLATE, apiKey, text, lang+"-"+langto));
@@ -76,7 +73,7 @@ public class YandexAPI {
 		YandexResponse inf = gson.fromJson(json, YandexResponse.class);
 		if(inf.getCode() != 200){
 			String[] exp = con.getResponseCode(inf.getCode());
-			logger.error(inf.getCode() + " - " + exp[1]);
+			throw new YandexException(inf.getCode()+"", exp[1]);
 		}
 		return inf;
 	}
@@ -91,7 +88,7 @@ public class YandexAPI {
 	 * 
 	 * @return Translated text
 	 */
-	public YandexResponse getYandexResponse(String text, YandexLanguage langto) {
+	public YandexResponse getYandexResponse(String text, YandexLanguage langto) throws YandexException {
 		String json = null;
 		try{
 			json = getJSONPOST(con.getURL(con.TRANSLATE, apiKey, text, langto.toString()));
@@ -102,7 +99,7 @@ public class YandexAPI {
 		YandexResponse inf = gson.fromJson(json, YandexResponse.class);
 		if(inf.getCode() != 200){
 			String[] exp = con.getResponseCode(inf.getCode());
-			logger.error(inf.getCode() + " - " + exp[1]);
+			throw new YandexException(inf.getCode()+"", exp[1]);
 		}
 		return inf;
 	}
